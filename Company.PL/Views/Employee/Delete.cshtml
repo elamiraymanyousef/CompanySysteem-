@@ -1,0 +1,72 @@
+﻿@model Employee
+@{
+    ViewData["Title"] = "Delete";
+}
+@if (!string.IsNullOrEmpty(TempData["Message"] as string))
+{
+    @* لكي يعرضها عندما يضيف قسم *@
+    <div class="alert alert-success">
+        @TempData["Message"];
+    </div>
+
+}
+<h1 class="text-center my-4">Delete Employee</h1>
+<div class="container">
+    <form asp-action="Delete">
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" readonly />
+            
+        </div>
+
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Age"></label>
+            <input asp-for="Age" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Email"></label>
+            <input asp-for="Email" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Address"></label>
+            <input asp-for="Address" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Phone"></label>
+            <input asp-for="Phone" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Salary"></label>
+            <input asp-for="Salary" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+            <input asp-for="IsACtive" class="form-chack" readonly/>
+            <label class="col-form-label" asp-for="IsACtive"></label>
+        </div>
+
+        <div class="form-group">
+            <input asp-for="IsDeleted" class="form-chack" readonly />
+            <label class="col-form-label" asp-for="IsDeleted"></label>
+        </div>
+
+        <div class="form-group">
+            <label class="col-form-label" asp-for="HiringDate"></label>
+            <input asp-for="HiringDate" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+            <label class="col-form-label" asp-for="HiringDate"></label>
+            <input asp-for="HiringDate" class="form-control" readonly />
+        </div>
+
+        <div class="d-flex justify-content-start gap-3">
+            <input type="submit" value="Delete" class="btn btn-danger"  />
+            <a asp-action="Index" class="btn btn-dark">Back to List</a>
+        </div>
+    </form>
+</div>
