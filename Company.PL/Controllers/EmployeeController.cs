@@ -120,7 +120,7 @@ namespace Company.PL.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit([FromRoute] int? id ,[FromServices] IDepartmentRepository _departmentRepository)
         {
-            // TO Get All Department
+            
             ViewData["Department"] =await _departmentRepository.GetAllAsync();
             return await Details(id, "Edit");
         }
@@ -162,7 +162,9 @@ namespace Company.PL.Controllers
                 //=================== Using AutoMapper ===================
                 var employee = _mapper.Map<Employee>(employeeDTO);
                 employee.Id = id.Value;
+
                  _unitOfWork.employeeRepository.Update(employee);
+
                 int count =await _unitOfWork.completeAsync();
 
                 if (count > 0)
