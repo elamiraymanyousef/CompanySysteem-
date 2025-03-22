@@ -122,7 +122,15 @@ namespace Company.PL.Controllers
         {
             
             ViewData["Department"] =await _departmentRepository.GetAllAsync();
-            return await Details(id, "Edit");
+            //return await Details(id, "Edit");
+            if (id is null)
+                return BadRequest();
+            var employee = await _unitOfWork.employeeRepository.GetAsync(id.Value);
+            if (employee is null)
+                return NotFound(new { StatusCode = 400, Message = $"Employee with id : {id} not found" });
+            var employeeDTO = _mapper.Map<CreatEmployeeDTO>(employee);
+
+            return View(employeeDTO);
         }
 
         [HttpPost]
@@ -190,32 +198,55 @@ namespace Company.PL.Controllers
 
 
 
+        #region Old Delete
+        //[HttpPost]
+        //public async Task<IActionResult> Delete([FromRoute] int? id, CreatEmployeeDTO employeeDTO)
+        //{
+        //    if (!ModelState.IsValid) return BadRequest();
+
+        //    #region Manual Maping 
+        //    //var employee = new Employee()
+        //    //{
+        //    //    Id = id.Value,
+        //    //    Name = employeeDTO.Name,
+        //    //    Email = employeeDTO.Email,
+        //    //    Address = employeeDTO.Address,
+        //    //    Salary = employeeDTO.Salary,
+        //    //    HiringDate = employeeDTO.HiringDate,
+        //    //    IsACtive = employeeDTO.IsACtive,
+        //    //    IsDeleted = employeeDTO.IsDeleted,
+        //    //    Phone = employeeDTO.Phone,
+        //    //    Age = employeeDTO.Age
+        //    //};
+
+        //    #endregion
+        //    //======================== outoMapper ========================
+        //    var employee = _mapper.Map<Employee>(employeeDTO);
+        //    employee.Id = id.Value;
+        //    _unitOfWork.employeeRepository.Delete(employee);
+        //    int count =await _unitOfWork.completeAsync();
+        //    if (count > 0)
+        //    {
+        //        DecumentSettings.DeleteImage("Images", employeeDTO.ImageName);
+        //        TempData["Message"] = "Employee Deleted Successfully";
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    return View(employeeDTO);
+        //} 
+        #endregion
+
+
         [HttpPost]
         public async Task<IActionResult> Delete([FromRoute] int? id, CreatEmployeeDTO employeeDTO)
         {
             if (!ModelState.IsValid) return BadRequest();
+            
 
-            #region Manual Maping 
-            //var employee = new Employee()
-            //{
-            //    Id = id.Value,
-            //    Name = employeeDTO.Name,
-            //    Email = employeeDTO.Email,
-            //    Address = employeeDTO.Address,
-            //    Salary = employeeDTO.Salary,
-            //    HiringDate = employeeDTO.HiringDate,
-            //    IsACtive = employeeDTO.IsACtive,
-            //    IsDeleted = employeeDTO.IsDeleted,
-            //    Phone = employeeDTO.Phone,
-            //    Age = employeeDTO.Age
-            //};
-
-            #endregion
             //======================== outoMapper ========================
             var employee = _mapper.Map<Employee>(employeeDTO);
             employee.Id = id.Value;
             _unitOfWork.employeeRepository.Delete(employee);
-            int count =await _unitOfWork.completeAsync();
+            int count = await _unitOfWork.completeAsync();
             if (count > 0)
             {
                 DecumentSettings.DeleteImage("Images", employeeDTO.ImageName);
