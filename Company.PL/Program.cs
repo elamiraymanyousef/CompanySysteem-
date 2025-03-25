@@ -32,7 +32,12 @@ namespace Company.PL
                 options.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             },ServiceLifetime.Scoped); // Register DI for CompanyDbContext
 
-           
+            builder.Services.ConfigureApplicationCookie(config =>
+            {
+                config.LoginPath = "/Account/SignIn";
+
+
+            });
 
 
             // 
@@ -49,7 +54,9 @@ namespace Company.PL
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseRouting();
+            
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",

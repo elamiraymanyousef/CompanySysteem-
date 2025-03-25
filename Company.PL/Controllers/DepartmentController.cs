@@ -2,11 +2,13 @@
 using Company.BLL.Interfaces;
 using Company.DAL.Models;
 using Company.PL.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Company.PL.Controllers
 {
     // MVC Controller
+    [Authorize]//this allow for that Authorize only
     public class DepartmentController : Controller
     {
         private readonly IMapper _mapper;

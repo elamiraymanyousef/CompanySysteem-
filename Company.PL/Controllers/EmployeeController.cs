@@ -5,11 +5,13 @@ using Company.BLL.Repositories;
 using Company.DAL.Models;
 using Company.PL.DTOs;
 using Company.PL.HelperImage;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.JSInterop.Infrastructure;
 
 namespace Company.PL.Controllers
 {
+    [Authorize]//this allow for that Authorize only
     public class EmployeeController : Controller
     {
         // ================= oldway=================
