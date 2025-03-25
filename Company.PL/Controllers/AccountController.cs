@@ -9,10 +9,12 @@ namespace Company.PL.Controllers
     public class AccountController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public AccountController(UserManager<AppUser> userManager) 
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager) 
         {
            _userManager = userManager;
+           _signInManager = signInManager;
         }
 
         #region SignUp
@@ -86,7 +88,13 @@ namespace Company.PL.Controllers
                     if (flag)
                     {
                         // SignIn 
+                       var result =await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMy, false);
+                       if (result.Succeeded)
+                        {
                         return RedirectToAction(nameof(HomeController.Index), "Home");
+
+                        }
+                        
                     }
 
                 }
@@ -98,6 +106,12 @@ namespace Company.PL.Controllers
         #endregion
 
         #region SignOut
+        public new  async Task<IActionResult> SignOut()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction(nameof(SignIn));
+        }
+
 
         #endregion
 
