@@ -1,0 +1,33 @@
+﻿@model SignInDTO
+@{
+    ViewData["Title"] = "SignIn";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+}
+
+<div class="main-agileinfo">
+	<div class="agileits-top">
+		<div asp-validation-summary="All" class="mb-2 alert alert-danger"></div>
+
+		<form asp-action="SignIn" method="post">
+			<input class="text email" asp-for="Email" placeholder="Email" required="">
+			<input class="text" asp-for="Password" placeholder="Password" required="">
+			<div class="wthree-text">
+				<label class="anim">
+					<input asp-for="RememberMy" class="checkbox" >
+					<span>RememberMy</span>
+				</label>
+				<div class="clear"> </div>
+			</div>
+			<input type="submit" value="SIGNIN ">
+		</form>
+		<p>Don't have an Account? <a asp-action="SignUp"> Create New Account </a></p>
+	</div>
+</div>
+
+@section Validation
+{
+	<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+	<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+}
+
