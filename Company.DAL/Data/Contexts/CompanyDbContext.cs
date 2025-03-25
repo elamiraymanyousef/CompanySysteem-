@@ -1,4 +1,6 @@
 ﻿using Company.DAL.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,7 +11,9 @@ using System.Threading.Tasks;
 
 namespace Company.DAL.Data.Contexts
 {
-    public class CompanyDbContext : DbContext
+    //  DbContext   بدلا من IDentityDbContext نعمل الكلاس يرث من
+    //علشان IDentityDbcontext يحتوي علي كل انواع Dbcontext 
+    public class CompanyDbContext : /*DbContext*/ IdentityDbContext<AppUser>
     {
         public CompanyDbContext(DbContextOptions<CompanyDbContext> options) : base(options)
         {
@@ -18,8 +22,9 @@ namespace Company.DAL.Data.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
+            
             base.OnModelCreating(modelBuilder);
+
         }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -29,5 +34,11 @@ namespace Company.DAL.Data.Contexts
 
         public DbSet<Department> Departments { get; set; }
         public DbSet<Employee> Employees { get; set; }
+
+        // هستغني عنها لانها موجوده في الكلاس الاب الكود الموجود فوق 
+        //public DbSet<IdentityUser> Users { get; set; }
+        //public DbSet<IdentityRole> Roles { get; set; }
+
+
     }
 }

@@ -1,7 +1,9 @@
 using Company.BLL.Interfaces;
 using Company.BLL.Repositories;
 using Company.DAL.Data.Contexts;
+using Company.DAL.Models;
 using Company.PL.Mapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Company.PL
@@ -20,12 +22,20 @@ namespace Company.PL
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>(); // Register DI for EmployeeRepository
             //builder.Services.AddAutoMapper(typeof(EmployeeMapper)); 
             builder.Services.AddAutoMapper(M=> M.AddProfile( new EmployeeMapper())); // Register DI for EmployeeMapper
+         
+            builder.Services.AddIdentity<AppUser, IdentityRole>()
+                                    .AddEntityFrameworkStores<CompanyDbContext>(); // Register DI for IdentityRole
+
 
             builder.Services.AddDbContext<CompanyDbContext>(options =>
             {
                 options.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             },ServiceLifetime.Scoped); // Register DI for CompanyDbContext
 
+           
+
+
+            // 
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
