@@ -115,6 +115,31 @@ namespace Company.PL.Controllers
 
         #endregion
 
+        #region ForgetPassword
+        [HttpGet]
+        public IActionResult ForgetPassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ForgetPassword( ForgetPasswordDTO model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user =await _userManager.FindByEmailAsync(model.Email);
+                if(user is not null)
+                {
+                    //Send Email 
+
+                }
+
+            }
+            ModelState.AddModelError("", "Invalid Reset Password !!");
+            return View();
+        }
+
+
+        #endregion
 
     }
 }
