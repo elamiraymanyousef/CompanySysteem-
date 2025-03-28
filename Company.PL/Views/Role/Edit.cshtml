@@ -1,0 +1,46 @@
+﻿@* @model Employee *@    
+@model RoleToReturnDTO
+@{
+    ViewData["Title"] = "Edit";
+    //var AllDepartments = new SelectList(ViewData["Department"] as IEnumerable<Department>, nameof(Department.Id), nameof(Department.Name));
+
+}
+@if (!string.IsNullOrEmpty(TempData["Message"] as string))
+{
+   
+    <div class="alert alert-success">
+        @TempData["Message"];
+    </div>
+
+}
+<h1>Edit Role</h1>
+
+<div class="container">
+
+   
+
+    <form asp-action="Edit" enctype="multipart/form-data">
+    
+
+<div class="form-group">
+    <label class="col-form-label" asp-for="Id"></label>
+    <input asp-for="Id" class="form-control" />
+    <span asp-validation-for="Id" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label class="col-form-label" asp-for="Name"></label>
+    <input asp-for="Name" class="form-control" />
+    <span asp-validation-for="Name" class="text-danger"></span>
+</div>
+
+		<div class="d-flex justify-content-start gap-3 mt-4">
+            <input type="submit" value="Edit" class=" btn btn-primary" />
+            <a asp-action="Index"  class="btn btn-light">Back to List</a>
+        </div>
+    </form>
+</div>
+@section ValidationScripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

@@ -1,0 +1,31 @@
+﻿ @model RoleToReturnDTO;
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details Role</h1>
+
+
+
+<div class="form-group">
+    <label class="col-form-label" asp-for="Id"></label>
+    <input asp-for="Id" class="form-control" readonly />
+</div>
+
+<div class="form-group">
+    <label class="col-form-label" asp-for="Name"></label>
+    <input asp-for="Name" class="form-control" readonly />
+</div>
+
+
+
+
+
+
+
+
+
+<div class="d-flex justify-content-start gap-3 mt-3">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+    <a asp-action="Index" class="btn btn-dark">Back to List</a>
+</div>
