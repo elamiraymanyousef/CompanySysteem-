@@ -20,7 +20,7 @@ namespace Company.PL.Controllers
            _userManager = userManager;
            _signInManager = signInManager;
         }
-
+        //security module
         #region SignUp
         [HttpGet]
         public IActionResult SignUp()
