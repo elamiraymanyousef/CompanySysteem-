@@ -1,0 +1,51 @@
+﻿@model RoleToReturnDTO
+@* @inject IDepartmentRepository _departmentRepository; *@
+@{
+    ViewData["Title"] = "Creat";
+	// <option value="">Select Department</option>
+	// cast viewdata to same type of return from controller
+	// ========first way to send data from controller to view ==========
+   // var AllRole = new SelectList(ViewData["roleToReturnDTO"] as IEnumerable<RoleToReturnDTO>, nameof(RoleToReturnDTO.Id), nameof(RoleToReturnDTO.Name));
+    var AllRole = new SelectList(ViewData["Role"] as IEnumerable<RoleToReturnDTO> ?? new List<RoleToReturnDTO>(), nameof(RoleToReturnDTO.Id), nameof(RoleToReturnDTO.Name));
+
+    // ========second way to get data from  view directly==========
+   // var AllDepartments = new SelectList(await _departmentRepository.GetAllAsync(), nameof(Department.Id), nameof(Department.Name));
+
+	// ========there is another way to get data from view directly==========
+	// use for loop to get data from view
+    // var AllDepartments = ViewData["Department"] as IEnumerable<Department>
+}
+
+
+@if (!string.IsNullOrEmpty(TempData["Message"] as string))
+{
+    @* لكي يعرضها عندما يضيف قسم *@
+    <div class="alert alert-success">
+        @TempData["Message"];
+    </div>
+
+}
+
+<h1 class="text-center my-4">Create Employee</h1>
+<div class="container">
+    <form asp-action="Create" enctype="multipart/form-data">
+        
+
+        <partial name="EmployeePartialView/_CreatEditePartialView" />
+        
+        <label class="col-form-label" asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+
+        
+
+        <div class="d-flex justify-content-start gap-3">
+            <input type="submit" value="Submit" class="mt-4 btn btn-primary" />
+            <a asp-action="Index" class="mt-4 btn btn-light">Back to List</a>
+        </div>
+    </form>
+</div>
+@section ValidationScripts {
+	<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+	<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
