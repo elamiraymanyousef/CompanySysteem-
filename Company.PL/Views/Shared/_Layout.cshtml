@@ -129,6 +129,32 @@
 
     @* for validation *@
     @await RenderSectionAsync("ValidationScripts", required: false)
+    @RenderSection("Scripts", required: false) @* for style of home page *@
 </body>
+<style>
+    .navbar-nav .nav-link {
+        color: rgba(255, 255, 255, 0.6) !important; /* لون أبيض شفاف */
+        transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    }
+
+        .navbar-nav .nav-link:hover {
+            color: white !important; /* يتحول إلى أبيض بالكامل */
+            background-color: rgba(255, 255, 255, 0.2); /* لون خلفية خفيف */
+            border-radius: 5px; /* حواف ناعمة */
+            padding: 5px 5px; /* تكبير المساحة حول النص */
+        }
+
+    .btn-outline-danger {
+        color: rgba(255, 0, 0, 0.6); /* لون زر تسجيل الخروج شفاف */
+        border-color: rgba(255, 0, 0, 0.6);
+        transition: all 0.3s ease-in-out;
+    }
+
+        .btn-outline-danger:hover {
+            background-color: red;
+            color: white;
+            border-color: red;
+        }
+</style>
 </html>
 

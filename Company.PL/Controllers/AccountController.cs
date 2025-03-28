@@ -1,7 +1,11 @@
 ﻿using Company.DAL.Models;
 using Company.PL.DTOs;
+using Company.PL.HelperImage;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace Company.PL.Controllers
@@ -122,24 +126,105 @@ namespace Company.PL.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> ForgetPassword( ForgetPasswordDTO model)
+        public  async Task<IActionResult> SendRestePasswordUrl( ForgetPasswordDTO model)
         {
             if (ModelState.IsValid)
             {
-                var user =await _userManager.FindByEmailAsync(model.Email);
-                if(user is not null)
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user is not null)
                 {
-                    //Send Email 
+                    // Generate Token
+                     var token= await _userManager.GeneratePasswordResetTokenAsync(user);
+
+                    //Create URL
+                    var url = Url.Action("ResetPassword", "Account", new { email = model.Email, token }, Request.Scheme);
+                    
+                    //Create Email 
+                    var email = new Email()
+                    {
+                        To = model.Email,
+                        Subject = "Reset Password",
+                        Body = url
+                    };
+
+                    // send Email
+                    var flag = EmailSettings.SendEmail(email);
+                    if (flag)
+                    {
+
+
+                        //Check Your Email Inbox
+                        return RedirectToAction("CheckYourInbox");
+                    }
 
                 }
 
             }
             ModelState.AddModelError("", "Invalid Reset Password !!");
-            return View();
+            return View("ForgetPassword",model);
+            //return View();
         }
 
 
         #endregion
+
+        #region Check Your Inbox
+
+        [HttpGet]
+        public IActionResult CheckYourInbox()
+        {
+            return View();
+        }
+
+        #endregion
+
+        #region ResetPassword
+        [HttpGet]
+        public IActionResult ResetPassword( string email , string token)
+        {
+            TempData["email"] = email;
+            TempData["token"] = token;
+
+
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDTO model)
+        {
+
+            if(ModelState.IsValid)
+            {
+                var email = TempData["email"] as string ;
+                var token = TempData["token"] as string ;
+
+
+                if( email is not null && token is not null)
+                {
+                    var user =await _userManager.FindByEmailAsync(email);
+                    if (user is not null)
+                    {
+                        var result =await _userManager.ResetPasswordAsync(user, token, model.NewPassword);
+                        if (result.Succeeded)
+                        {
+                            return RedirectToAction("SignIn");
+                        }
+                        foreach (var error in result.Errors)
+                        {
+                            ModelState.AddModelError("", error.Description);
+                        }
+                    }
+                }
+                else
+                {
+                    return BadRequest("Invalid opeeration !! ");
+                }
+
+            }
+            return View();
+        }
+
+        #endregion
+
 
     }
 }

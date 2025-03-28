@@ -22,10 +22,10 @@ namespace Company.PL
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>(); // Register DI for EmployeeRepository
             //builder.Services.AddAutoMapper(typeof(EmployeeMapper)); 
             builder.Services.AddAutoMapper(M=> M.AddProfile( new EmployeeMapper())); // Register DI for EmployeeMapper
-         
-            builder.Services.AddIdentity<AppUser, IdentityRole>()
-                                    .AddEntityFrameworkStores<CompanyDbContext>(); // Register DI for IdentityRole
 
+            builder.Services.AddIdentity<AppUser, IdentityRole>()
+                                    .AddEntityFrameworkStores<CompanyDbContext>()// Register DI for IdentityRole
+                                    .AddDefaultTokenProviders();
 
             builder.Services.AddDbContext<CompanyDbContext>(options =>
             {

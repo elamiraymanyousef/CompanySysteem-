@@ -1,4 +1,4 @@
-﻿@{
+﻿@* @{
     ViewData["Title"] = "Home Page";
 }
 
@@ -6,3 +6,23 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+ *@
+@{
+    ViewData["Title"] = "Home Page";
+}
+@* style For Home Page *@
+<div class="container d-flex flex-column align-items-center justify-content-center vh-100 text-center">
+    <h1 class="display-3 fw-bold text-primary">Welcome to Our Platform!</h1>
+    <p class="lead text-muted mb-4">
+        Build modern and powerful web applications with <strong>ASP.NET Core</strong>.
+    </p>
+
+    <a href="https://learn.microsoft.com/aspnet/core" class="btn btn-lg btn-primary shadow-sm">
+        <i class="bi bi-book"></i> Learn More
+    </a>
+</div>
+
+@section Scripts
+{
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.js"></script>
+}
