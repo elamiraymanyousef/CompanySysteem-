@@ -1,18 +1,23 @@
 ﻿using Company.DAL.Models;
 using Company.PL.DTOs;
 using Company.PL.HelperImage;
+using Company.PL.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace Company.PL.Controllers
 {
     public class RoleController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<AppUser> _userManager;
 
-        public RoleController(RoleManager<IdentityRole>roleManager)
+        public RoleController(RoleManager<IdentityRole>roleManager, UserManager<AppUser>userManager)
         {
             _roleManager = roleManager;
+           _userManager = userManager;
         }
 
 
@@ -53,6 +58,7 @@ namespace Company.PL.Controllers
         //{
         //    return View();
         //}
+
         [HttpGet]
         public IActionResult Create()
         {
@@ -67,30 +73,7 @@ namespace Company.PL.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Create(RoleToReturnDTO roleToReturnDTO)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-
-        //        var role= await _roleManager.FindByNameAsync(roleToReturnDTO.Name);
-        //        if( role is null)
-        //        {
-        //            role = new IdentityRole()
-        //            {
-        //                Name = roleToReturnDTO.Name,
-        //            };
-
-        //            var result = await _roleManager.CreateAsync(role);
-        //            if (result.Succeeded)
-        //            {
-        //                return RedirectToAction("Index");
-        //            }
-        //        }
-        //    }
-        //    return View(roleToReturnDTO);
-        //}
-
+        
 
         [HttpPost]
         public async Task<IActionResult> Create(RoleToReturnDTO roleToReturnDTO)
@@ -122,11 +105,6 @@ namespace Company.PL.Controllers
 
             return View(roleToReturnDTO);
         }
-
-
-
-
-
 
 
         [HttpGet]
@@ -207,6 +185,41 @@ namespace Company.PL.Controllers
 
             }
             return View(roleToReturnDTO);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> AddOrRemoveUsers( string roleId)
+        {
+           var role =await _roleManager.FindByIdAsync(roleId);
+            if (role == null) return NotFound();
+
+            var usersIdRole = new List<UsersInRoleViewModel>();
+            var users = await _userManager.Users.ToListAsync();
+            foreach (var user in users)
+            {
+                var userInRole = new UsersInRoleViewModel()
+                {
+                     UserId = user.Id,
+                     UserName = user.UserName,
+
+
+                };
+
+                if( await _userManager.IsInRoleAsync(user,role.Name))
+                {
+                    userInRole.IsSelected = true;
+                }
+                else
+                {
+                    userInRole.IsSelected= false;
+                }
+
+                usersIdRole.Add(userInRole);
+
+            }
+            return View(usersIdRole);
+                
         }
     }
 }

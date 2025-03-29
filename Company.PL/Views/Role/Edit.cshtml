@@ -33,12 +33,24 @@
     <input asp-for="Name" class="form-control" />
     <span asp-validation-for="Name" class="text-danger"></span>
 </div>
+        
+
+
+
 
 		<div class="d-flex justify-content-start gap-3 mt-4">
+            <a asp-action="AddOrRemoveUsers" asp-route-roleId="@Model.Id" class="btn btn-success ">Add Or Remove User</a>
             <input type="submit" value="Edit" class=" btn btn-primary" />
             <a asp-action="Index"  class="btn btn-light">Back to List</a>
         </div>
+
+
+
+
     </form>
+
+
+
 </div>
 @section ValidationScripts {
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
