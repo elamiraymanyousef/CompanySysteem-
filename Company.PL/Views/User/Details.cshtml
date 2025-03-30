@@ -2,13 +2,20 @@
 @{
     ViewData["Title"] = "Details";
 }
+<div class="row">
 
-<h1>Details</h1>
+    <h1 class=" col-4">Details</h1>
 
-<!-- صورة الموظف -->
-@* <div class="text-center mb-4">
-    <img src="~/Images/@Model.ImageName" width="120" height="120" class="rounded-circle border" alt="Employee Image">
-</div> *@
+    <div class="col-8">
+        <!-- صورة الموظف -->
+
+        @* <img src="~/Images/@Model.ImageName" width="120" height="120" class="rounded-circle border" alt="Employee Image"> *@
+        <img src="~/Images/@(string.IsNullOrEmpty(Model.ImageName) ? "OIP.jpg" : Model.ImageName)"
+             width="120" height="120" class="rounded-circle border" alt="User Image" width="100" height="100" />
+
+    
+    </div>
+</div> 
 
 <div class="form-group">
     <label class="col-form-label" asp-for="UserName"></label>

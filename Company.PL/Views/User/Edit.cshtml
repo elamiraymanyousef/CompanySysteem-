@@ -13,10 +13,10 @@
     </div>
 
 }
-@* <div class="row">
+<div class="row">
     <div class="col-4">
 
-        <h1 class="text-center my-4">Edit Employee</h1>
+        <h1 class="text-center my-4">Edit Users</h1>
 
     </div>
     <div class="col-8">
@@ -26,7 +26,7 @@
     </div>
 
 
-</div> *@
+</div>
 
 <div class="container">
 
@@ -136,6 +136,10 @@
     <input asp-for="Roles" class="form-control" />
     <span asp-validation-for="Roles" class="text-danger"></span>
 </div>
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Image"></label>
+            <input asp-for="Image" type="file" class="form-control" />
+        </div>
 
 		<div class="d-flex justify-content-start gap-3 mt-4">
             <input type="submit" value="Edit" class=" btn btn-primary" />

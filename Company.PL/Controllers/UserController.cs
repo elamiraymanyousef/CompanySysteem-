@@ -33,9 +33,10 @@ namespace Company.PL.Controllers
                    FirstName = U.FirstName,
                    LastName = U.LastName,
                    Email = U.Email,
-                   Roles = _userManager.GetRolesAsync(U).Result
+                   Roles = _userManager.GetRolesAsync(U).Result,
+                  ImageName = string.IsNullOrEmpty(U.ImageName) ? "OIP.jpg" : U.ImageName, // ✅ تعيين الصورة الافتراضية
 
-               });
+              }).ToList();
             }
             else
             {
@@ -47,9 +48,9 @@ namespace Company.PL.Controllers
                     FirstName = U.FirstName,
                     LastName = U.LastName,
                     Email = U.Email,
-                    Roles = _userManager.GetRolesAsync(U).Result
-
-                }).Where(U => U.FirstName.ToLower().Contains(SearchName.ToLower()));
+                    Roles = _userManager.GetRolesAsync(U).Result,
+                    ImageName = U.ImageName
+                }).Where(U => U.FirstName.ToLower().Contains(SearchName.ToLower())).ToList();
             }
 
 
@@ -69,8 +70,9 @@ namespace Company.PL.Controllers
             FirstName = usre.FirstName,
             LastName= usre.LastName,
             Email = usre.Email,
-            Roles =_userManager.GetRolesAsync(usre).Result
-            
+            Roles =_userManager.GetRolesAsync(usre).Result,
+             ImageName = string.IsNullOrEmpty(usre.ImageName) ? "OIP.jpg" : usre.ImageName, // ✅ تعيين الصورة الافتراضية
+
             };
             return View(viewStat, dto);
         }
@@ -82,29 +84,84 @@ namespace Company.PL.Controllers
             return await Details(id, "Edit");
         }
 
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit([FromRoute] string? id, UserToReturnDTO  userToReturnDTO)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (id != userToReturnDTO.Id) return BadRequest("Invalid Operation");
+        //        var user = await _userManager.FindByIdAsync(id);
+        //        if (user == null) return BadRequest("Invalid Operation");
+        //        user.UserName = userToReturnDTO.UserName;
+        //        user.FirstName = userToReturnDTO.FirstName;
+        //        user.LastName = userToReturnDTO.LastName;
+        //        user.Email = userToReturnDTO.Email;
+        //        user.ImageName = userToReturnDTO.ImageName;
+
+        //        if (userToReturnDTO.Image is not null)
+        //        {
+        //            // save image
+        //            userToReturnDTO.ImageName = DecumentSettings.UploadImage(userToReturnDTO.Image, "Images");
+        //        }
+        //        //// ✅ رفع الصورة إذا تم اختيارها
+        //        //if (userToReturnDTO.Image != null)
+        //        //{
+        //        //    var uploadsFolder = Path.Combine("wwwroot", "uploads");
+        //        //    Directory.CreateDirectory(uploadsFolder); // تأكد أن المجلد موجود
+
+        //        //    var fileName = $"{Guid.NewGuid()}_{userToReturnDTO.Image.FileName}";
+        //        //    var filePath = Path.Combine(uploadsFolder, fileName);
+
+        //        //    using (var fileStream = new FileStream(filePath, FileMode.Create))
+        //        //    {
+        //        //        await userToReturnDTO.Image.CopyToAsync(fileStream);
+        //        //    }
+
+        //        //    user.ImageName = fileName; // 🖼️ حفظ اسم الملف في قاعدة البيانات
+        //        //}
+        //        var result= await _userManager.UpdateAsync(user);
+        //        if (result.Succeeded)
+        //        {
+        //            return RedirectToAction(nameof(Index));
+        //        }
+
+        //    }
+        //    return View(userToReturnDTO);
+        //}
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit([FromRoute] string? id, UserToReturnDTO  userToReturnDTO)
+        public async Task<IActionResult> Edit([FromRoute] string? id, UserToReturnDTO userToReturnDTO)
         {
             if (ModelState.IsValid)
             {
                 if (id != userToReturnDTO.Id) return BadRequest("Invalid Operation");
                 var user = await _userManager.FindByIdAsync(id);
                 if (user == null) return BadRequest("Invalid Operation");
+
                 user.UserName = userToReturnDTO.UserName;
                 user.FirstName = userToReturnDTO.FirstName;
                 user.LastName = userToReturnDTO.LastName;
                 user.Email = userToReturnDTO.Email;
 
-                var result= await _userManager.UpdateAsync(user);
+
+                if (userToReturnDTO.Image is not null)
+                {
+                    // حفظ الصورة وتحديث اسمها في قاعدة البيانات
+                    var fileName = DecumentSettings.UploadImage(userToReturnDTO.Image, "Images");
+                    user.ImageName = fileName;  // ✅ التحديث على `user`
+                }
+
+                var result = await _userManager.UpdateAsync(user);
                 if (result.Succeeded)
                 {
                     return RedirectToAction(nameof(Index));
                 }
-
             }
             return View(userToReturnDTO);
         }
+
 
         [HttpGet]
         public async Task<IActionResult> Delete(string? id)
@@ -127,6 +184,7 @@ namespace Company.PL.Controllers
                 user.FirstName = userToReturnDTO.FirstName;
                 user.LastName = userToReturnDTO.LastName;
                 user.Email = userToReturnDTO.Email;
+               user.ImageName = userToReturnDTO.ImageName;
 
                 var result = await _userManager.DeleteAsync(user);
  
