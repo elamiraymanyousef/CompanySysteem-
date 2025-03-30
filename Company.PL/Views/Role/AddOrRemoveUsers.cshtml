@@ -22,6 +22,7 @@
 @{
     ViewData["Title"] = "AddOrRemoveUsers";
     Layout = "~/Views/Shared/_AuthLayout.cshtml";
+    var RoleId = ViewData["roleId"] as string;
 }
 
 <h2 class="text-center mb-4">Manage Role Users</h2>
@@ -31,7 +32,7 @@
         <div class="col-md-8 offset-md-2">
             <div class="card shadow-lg rounded-3">
                 <div class="card-body">
-                    <form asp-action="AddOrRemoveUsers">
+                    <form asp-action="AddOrRemoveUsers" asp-route-roleId="@RoleId">
                     @* <form asp-action="AddOrRemoveUsers" asp-route-roleId="@roleId" method="post"> *@
 
                         <div class="list-group">
@@ -41,12 +42,17 @@
                                     <input asp-for="@Model[i].IsSelected" class="form-check-input mt-0">
                                     <span class="fw-bold">@Model[i].UserName</span>
                                 </label>
+
+                                <input type="hidden" asp-for="@Model[i].UserId" />  
+                                <input type="hidden" asp-for="@Model[i].UserName" />
+
                             }
                         </div>
 
                         <div class="d-flex justify-content-end mt-3">
                             <button type="submit" class="btn btn-primary">Save Changes</button>
-                            <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+                           @*  <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a> *@
+                            <a asp-action="Edit" asp-route-id="@RoleId" class="btn btn-secondary ms-2">Cancel</a>
                         </div>
                     </form>
                 </div>

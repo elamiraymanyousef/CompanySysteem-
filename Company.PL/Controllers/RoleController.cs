@@ -194,6 +194,7 @@ namespace Company.PL.Controllers
            var role =await _roleManager.FindByIdAsync(roleId);
             if (role == null) return NotFound();
 
+            ViewData["roleId"] = roleId;
             var usersIdRole = new List<UsersInRoleViewModel>();
             var users = await _userManager.Users.ToListAsync();
             foreach (var user in users)
@@ -238,7 +239,7 @@ namespace Company.PL.Controllers
                     {
                         if (userVM.IsSelected)
                         {
-                            if (userVM.IsSelected &&!await _userManager.IsInRoleAsync(user, role.Name))
+                            if (userVM.IsSelected && !await _userManager.IsInRoleAsync(user, role.Name))
                             {
                                 await _userManager.AddToRoleAsync(user, role.Name);
                             }
@@ -254,7 +255,7 @@ namespace Company.PL.Controllers
 
                    
                 }
-                return RedirectToAction(nameof(Index)); // أو رجع للـ Role Details
+                return RedirectToAction(nameof(Edit),new {id = roleId}); // أو رجع للـ Role Edit
             }
             return View(users); // أو رجع للـ Role Details
         }
