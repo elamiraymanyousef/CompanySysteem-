@@ -9,6 +9,8 @@
         
         public string LastName { get; set; }
         public string Email { get; set; }
+        public IFormFile? Image { get; set; }
+        public string? ImageName { get; set; }
         public IEnumerable<string>? Roles { get; set; }
     }
 }

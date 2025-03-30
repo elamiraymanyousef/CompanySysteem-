@@ -221,5 +221,45 @@ namespace Company.PL.Controllers
             return View(usersIdRole);
                 
         }
+
+
+        [HttpPost]
+        public async Task<IActionResult> AddOrRemoveUsers(string roleId, List<UsersInRoleViewModel> users)
+        {
+            var role = await _roleManager.FindByIdAsync(roleId);
+            if (role == null) return NotFound();
+
+            if(ModelState.IsValid)
+            {
+                foreach (var userVM in users)
+                {
+                    var user = await _userManager.FindByIdAsync(userVM.UserId);
+                    if (user is not null)
+                    {
+                        if (userVM.IsSelected)
+                        {
+                            if (userVM.IsSelected &&!await _userManager.IsInRoleAsync(user, role.Name))
+                            {
+                                await _userManager.AddToRoleAsync(user, role.Name);
+                            }
+                        }
+                        else
+                        {
+                            if (!userVM.IsSelected && await _userManager.IsInRoleAsync(user, role.Name))
+                            {
+                                await _userManager.RemoveFromRoleAsync(user, role.Name);
+                            }
+                        }
+                    }
+
+                   
+                }
+                return RedirectToAction(nameof(Index)); // أو رجع للـ Role Details
+            }
+            return View(users); // أو رجع للـ Role Details
+        }
+
     }
+
+
 }

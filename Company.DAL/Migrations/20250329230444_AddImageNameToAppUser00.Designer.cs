@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Company.DAL.Migrations
 {
     [DbContext(typeof(CompanyDbContext))]
-    [Migration("20250325001619_AddIdentityTables")]
-    partial class AddIdentityTables
+    [Migration("20250329230444_AddImageNameToAppUser00")]
+    partial class AddImageNameToAppUser00
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,6 +49,9 @@ namespace Company.DAL.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsAgree")
