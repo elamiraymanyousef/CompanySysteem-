@@ -15,7 +15,7 @@ namespace Company.PL.HelperImage
                 //SMTP
                 var client = new SmtpClient("smtp.gmail.com", 587);
                 client.EnableSsl = true; //  تشفير البيانات  
-                client.Credentials = new NetworkCredential("alamyraymnalhmd@gmail.com", "cdqionvvnjoaubsw");// sender 
+                client.Credentials = new NetworkCredential("alamyraymnalhmd@gmail.com", "zkgyohffpbsinsky");// sender 
                 client.Send("alamyraymnalhmd@gmail", email.To, email.Subject, email.Body); //
                 return true;
                 

@@ -1,5 +1,6 @@
 ﻿using Company.DAL.Models;
 using Company.PL.DTOs;
+using Company.PL.Helper;
 using Company.PL.HelperImage;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
@@ -14,11 +15,12 @@ namespace Company.PL.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager) 
+        private readonly IMailService _mailService;
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IMailService mailService)
         {
-           _userManager = userManager;
-           _signInManager = signInManager;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _mailService = mailService;
         }
         //security module
         #region SignUp
@@ -148,15 +150,18 @@ namespace Company.PL.Controllers
                         Body = url
                     };
 
-                    // send Email
-                    var flag = EmailSettings.SendEmail(email);
-                    if (flag)
-                    {
+                    //// send Email الطريقه القديمه 
+                    //var flag = EmailSettings.SendEmail(email);
+                    //if (flag)
+                    //{
 
 
-                        //Check Your Email Inbox
-                        return RedirectToAction("CheckYourInbox");
-                    }
+                    //    //Check Your Email Inbox
+                    //    return RedirectToAction("CheckYourInbox");
+                    //}
+
+                    _mailService.SendEmail(email);
+                    return RedirectToAction("CheckYourInbox");
 
                 }
 
