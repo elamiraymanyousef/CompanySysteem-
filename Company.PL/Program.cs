@@ -2,7 +2,9 @@ using Company.BLL.Interfaces;
 using Company.BLL.Repositories;
 using Company.DAL.Data.Contexts;
 using Company.DAL.Models;
+using Company.PL.Helper;
 using Company.PL.Mapper;
+using Company.PL.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,6 +28,11 @@ namespace Company.PL
             builder.Services.AddIdentity<AppUser, IdentityRole>()
                                     .AddEntityFrameworkStores<CompanyDbContext>()// Register DI for IdentityRole
                                     .AddDefaultTokenProviders();
+            builder.Services.Configure<MailSettings>(builder.Configuration.GetSection(nameof(MailSettings)));
+
+            builder.Services.AddScoped<IMailService, MailService>(); // register DI for MailService ????? ??????? 
+
+
 
             builder.Services.AddDbContext<CompanyDbContext>(options =>
             {
